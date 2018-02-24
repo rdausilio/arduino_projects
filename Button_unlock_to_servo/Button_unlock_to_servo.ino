@@ -1,11 +1,8 @@
-#include <Servo.h>
-
 //TODO
 //get the buzzer to work properly
 
-
+#include <Servo.h>
 /******************************************/
-
 //servo
 Servo myservo;
 
@@ -15,10 +12,10 @@ const int buttonPin2 = 11; //The button on the left
 
 int val = 0;
 int bs1 = 0; //current state of the button
-int bS1 = 0; //previous state of the button
+int prevBs1 = 0; //previous state of the button
 
 int bs2 = 0; //current state of the button
-int bS2 = 0; //previous state of the button
+int prevBs2 = 0; //previous state of the button
 
 int pwcount = 0; //the number of button presses
 int combination[2] = {1, 2}; //the combination
@@ -60,7 +57,7 @@ void loop()
   bs1 = digitalRead(buttonPin1);
   bs2 = digitalRead(buttonPin2);
 
-  if (bs1 != bS1) {
+  if (bs1 != prevBs1) {
     if (bs1 == HIGH) {
       pwcount = pwcount + 1;
       Serial.println(pwcount);
@@ -71,19 +68,19 @@ void loop()
       }
     }
   }
-  bS1 = bs1;
+  prevBs1 = bs1;
 
-  if (bs2 != bS2) {
+  if (bs2 != prevBs2) {
     if (bs2 == HIGH) {
       pwcount = pwcount + 1;
       Serial.println(pwcount);
-      digitalWrite(buzzer, HIGH);
+      digitalWrite(buzzer, OUTPUT);
       delay(10);
       if (val == 1) {
         val = 2;
       }
     }
-    bS2 = bs2;
+    prevBs2 = bs2;
   }
 
   if (val == 2 && pwcount == 2) {
@@ -100,6 +97,7 @@ void loop()
     val = 0;
     pwcount = 0;
     Serial.println("Wrong.");
+    digitalWrite(buzzer, OUTPUT);
   }
 }
 
